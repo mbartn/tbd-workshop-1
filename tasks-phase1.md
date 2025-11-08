@@ -21,7 +21,20 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
 
 5. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
 
-    ***describe one selected module and put the output of terraform graph for this module here***
+    ![graph.png](modules/metastore/graph.png)
+ 
+    ***Metastore***
+   
+    Metastore module deploys the Dataproc Metastore - a fully managed Apache Hive Metastore. 
+    It can be used to manage data lake metadata and to provide interoperability between the various data processing 
+    engines and tools that are in use.
+
+    The module exposes 4 input variables - `project_name`, `region`, `network` and `metastore_version`. 
+    
+    Two resources are being created: 
+    - `google_project_service` - enables Google Cloud metastore API
+    - `google_dataproc_metastore_service` - deploys the actual service. 
+    
    
 6. Reach YARN UI
    
