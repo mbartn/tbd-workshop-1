@@ -97,10 +97,43 @@ The result is:
 
 
 9. Create a BigQuery dataset and an external table using SQL
-    
-    ***place the code and output here***
+
+Creating a BigQuery dataset:
+
+```sql
+CREATE SCHEMA IF NOT EXISTS `tbd-workshopw.sample_bq_dataset`
+OPTIONS (
+  location = 'europe-west1'
+);
+```
+
+Creating an external table referencing ORC files in GCS:
+
+```sql
+CREATE EXTERNAL TABLE IF NOT EXISTS `tbd-workshopw.sample_bq_dataset.sample_orc`
+OPTIONS (
+  format = 'ORC',
+  uris = ['gs://tbd-workshopw/orc-demo/*.orc']
+);
+```
+
+Querying the external table:
+
+```sql
+SELECT * FROM `tbd-workshopw.sample_bq_dataset.sample_orc`
+```
+
+BigQuery operations:
+
+![bq_operations.png](bq_operations.png)
+
+Output:
+
+![bq_output.png](bq_output.png)
    
-    ***why does ORC not require a table schema?***
+***Why does ORC not require a table schema?***
+
+ORC doesn't require a table schema because it is a self-describing file format that contains metadata about the data structure within the file itself.
 
 10. Find and correct the error in spark-job.py
 
