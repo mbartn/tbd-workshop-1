@@ -25,7 +25,10 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
    
 6. Reach YARN UI
    
-   ***place the command you used for setting up the tunnel, the port and the screenshot of YARN UI here***
+    ```bash
+    gcloud compute ssh tbd-cluster-m --zone "europe-west1-d" --tunnel-through-iap --project "tbd-2025z-342188" -- -L 8088:localhost:8088
+    ```
+   ![img_1.png](img_1.png)
    
 7. Draw an architecture diagram (e.g. in draw.io) that includes:
     1. Description of the components of service accounts
