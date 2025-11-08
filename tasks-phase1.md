@@ -16,9 +16,8 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
     1. Modify tasks-phase1.md file.
     
     2. Create PR from this branch to **YOUR** master and merge it to make new release. 
-    
-    ***place the screenshot from GA after successful application of release***
 
+    3. ![img.png](img.png)
 
 5. Analyze terraform code. Play with terraform plan, terraform graph to investigate different modules.
 
