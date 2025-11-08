@@ -80,7 +80,21 @@ resource_usage:
       worldwide: 150
 ```
 
-   ***place the screenshot from infracost output here***
+**Infracost output:**
+
+Infracost comment in PR:
+
+![infracost_comment.png](infracost_comment.png)
+
+After running the suggested command:
+
+```bash
+infracost breakdown --path="." --usage-file=infracost-usage.yml
+```
+
+The result is:
+![infracost_result.png](infracost_result.png)
+
 
 9. Create a BigQuery dataset and an external table using SQL
     
