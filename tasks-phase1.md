@@ -93,6 +93,7 @@ infracost breakdown --path="." --usage-file=infracost-usage.yml
 ```
 
 The result is:
+
 ![infracost_result.png](infracost_result.png)
 
 
