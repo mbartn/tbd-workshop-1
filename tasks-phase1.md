@@ -99,10 +99,12 @@ The result is:
 
 9. Create a BigQuery dataset and an external table using SQL
 
+Before creating a BQ dataset and table, [sample orc files](https://www.filesampleshub.com/download/code/orc/sample1.zip) were placed in GCS bucket: `gs://tbd-2025z-342188-data/sample-data/`
+
 Creating a BigQuery dataset:
 
 ```sql
-CREATE SCHEMA IF NOT EXISTS `tbd-workshopw.sample_bq_dataset`
+CREATE SCHEMA IF NOT EXISTS `tbd-2025z-342188.sample_bq_dataset`
 OPTIONS (
   location = 'europe-west1'
 );
@@ -111,30 +113,36 @@ OPTIONS (
 Creating an external table referencing ORC files in GCS:
 
 ```sql
-CREATE EXTERNAL TABLE IF NOT EXISTS `tbd-workshopw.sample_bq_dataset.sample_orc`
+CREATE EXTERNAL TABLE IF NOT EXISTS `tbd-2025z-342188.sample_bq_dataset.sample_orc`
 OPTIONS (
   format = 'ORC',
-  uris = ['gs://tbd-workshopw/orc-demo/*.orc']
+  uris = ['gs://tbd-2025z-342188-data/sample-data/*.orc']
 );
 ```
 
 Querying the external table:
 
 ```sql
-SELECT * FROM `tbd-workshopw.sample_bq_dataset.sample_orc`
+SELECT * FROM `tbd-2025z-342188.sample_bq_dataset.sample_orc`;
 ```
 
 BigQuery operations:
 
 ![bq_operations.png](bq_operations.png)
 
-Output:
+Created dataset:
+![bq_dataset.png](bq_dataset.png)
 
-![bq_output.png](bq_output.png)
+Created external table:
+![bq_table.png](bq_table.png)
+
+Query result:
+
+![bq_query.png](bq_query.png)
    
 ***Why does ORC not require a table schema?***
 
-ORC doesn't require a table schema because it is a self-describing file format that contains metadata about the data structure within the file itself.
+ORC doesn't require a table schema because it is a self-describing file format that contains metadata about the data structure within the file itself. This allows systems like BigQuery to automatically infer the schema when reading ORC files, eliminating the need for a predefined schema during table creation.
 
 10. Find and correct the error in spark-job.py
 
