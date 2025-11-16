@@ -47,7 +47,25 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
     1. Description of the components of service accounts
     2. List of buckets for disposal
     
-    ***place your diagram here***
+![infra_diag.png](infra_diag.png)
+
+**Service accounts:**
+- `tbd-2025z-342188-lab@tbd-2025z-342188.iam.gserviceaccount.com` - **Terraform SA (Owner)** - used by CI to create/destroy resources - stores backend state in `tbd-2025z-342188-state`
+- `tbd-2025z-342188-dataproc-sa@tbd-2025z-342188.iam.gserviceaccount.com` - **Dataproc Worker** - access to GCS (staging/temp/data) and BigQuery
+- `tbd-2025z-342188-data@tbd-2025z-342188.iam.gserviceaccount.com` - **Composer / data pipelines SA** - runs `demo-lab`, submits jobs to `tbd-cluster`, reads/writes GCS (code/data) and Composer buckets
+
+**Buckets to dispose (delete after workshop):**
+- `tbd-2025z-342188-code`
+- `tbd-2025z-342188-data`
+- `tbd-2025z-342188-dataproc-staging`
+- `tbd-2025z-342188-dataproc-temp`
+- `europe-west1-demo-lab-*-bucket` (Composer environment buckets created with `demo-lab`)
+
+> Composer buckets are created implicitly with the `demo-lab` environment and are removed when that environment is destroyed.
+
+**Bucket to keep:**
+- `tbd-2025z-342188-state` - Terraform state (`prevent_destroy=true`)
+
 
 8. Create a new PR and add costs by entering the expected consumption into Infracost
 For all the resources of type: `google_artifact_registry`, `google_storage_bucket`, `google_service_networking_connection`
