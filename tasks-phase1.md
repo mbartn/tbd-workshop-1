@@ -175,7 +175,8 @@ After launching the task in Dataproc, logs appeared in the Google Cloud console 
     
     link to the modified file and inserted terraform code: https://github.com/mbartn/tbd-workshop-1/blob/master/modules/dataproc/main.tf 
 
-    <img width="1431" height="251" alt="image" src="https://github.com/user-attachments/assets/25b18970-72fd-4907-9d56-e8e9289c6041" />
+    <img width="1426" height="175" alt="image" src="https://github.com/user-attachments/assets/557eac92-2670-448d-bdbf-36a1962e9d34" />
+
 
     
 13. Triggered Terraform Destroy on Schedule or After PR Merge. Goal: make sure we never forget to clean up resources and burn money.
