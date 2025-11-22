@@ -172,10 +172,13 @@ When running a Spark task on a Dataproc cluster, an error occurred indicating th
 After launching the task in Dataproc, logs appeared in the Google Cloud console indicating a problem with accessing the file (No such object, storage.objects.get). In Logs Explorer, it was possible to see the exact path that could not be opened. This clearly indicated that the cause was an incorrect value for the DATA_BUCKET variable.
 
 11. Add support for preemptible/spot instances in a Dataproc cluster
-
-    ***place the link to the modified file and inserted terraform code***
     
-12. Triggered Terraform Destroy on Schedule or After PR Merge. Goal: make sure we never forget to clean up resources and burn money.
+    link to the modified file and inserted terraform code: https://github.com/mbartn/tbd-workshop-1/blob/master/modules/dataproc/main.tf 
+
+    <img width="1431" height="251" alt="image" src="https://github.com/user-attachments/assets/25b18970-72fd-4907-9d56-e8e9289c6041" />
+
+    
+13. Triggered Terraform Destroy on Schedule or After PR Merge. Goal: make sure we never forget to clean up resources and burn money.
 
 Add a new GitHub Actions workflow that:
   1. runs terraform destroy -auto-approve
