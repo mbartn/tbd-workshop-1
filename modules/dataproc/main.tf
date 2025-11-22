@@ -127,12 +127,12 @@ resource "google_dataproc_cluster" "tbd-dataproc-cluster" {
 
     worker_config {
       num_instances = 2
+      num_preemptible_instances  = 2
       machine_type  = var.machine_type
       disk_config {
         boot_disk_type    = "pd-standard"
         boot_disk_size_gb = 100
       }
-
     }
   }
 }
