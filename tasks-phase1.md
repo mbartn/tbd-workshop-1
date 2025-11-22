@@ -164,6 +164,11 @@ ORC doesn't require a table schema because it is a self-describing file format t
 
 10. Find and correct the error in spark-job.py
 
+In file spark-job.py was error, which was to specify an incorrect path to the bucket.
+
+From "DATA_BUCKET	=	"gs://tbd-2025z-9900-data/data/shakespeare/" corrected to "gs://tbd-2025z-342188-data/data/shakespeare/".
+When running a Spark task on a Dataproc cluster, an error occurred indicating that the file was inaccessible. The error was detected based on logs in the Google Cloud console.	
+
     ***describe the cause and how to find the error***
 
 11. Add support for preemptible/spot instances in a Dataproc cluster
