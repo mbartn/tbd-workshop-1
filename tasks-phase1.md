@@ -169,7 +169,7 @@ In file spark-job.py was error, which was to specify an incorrect path to the bu
 From "DATA_BUCKET	=	"gs://tbd-2025z-9900-data/data/shakespeare/" corrected to "gs://tbd-2025z-342188-data/data/shakespeare/".
 When running a Spark task on a Dataproc cluster, an error occurred indicating that the file was inaccessible. The error was detected based on logs in the Google Cloud console.	
 
-    ***describe the cause and how to find the error***
+After launching the task in Dataproc, logs appeared in the Google Cloud console indicating a problem with accessing the file (No such object, storage.objects.get). In Logs Explorer, it was possible to see the exact path that could not be opened. This clearly indicated that the cause was an incorrect value for the DATA_BUCKET variable.
 
 11. Add support for preemptible/spot instances in a Dataproc cluster
 
