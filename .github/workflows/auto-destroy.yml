@@ -2,7 +2,7 @@ name: Auto destroy
 
 on:
   schedule:
-    - cron: "0 22 * * *"
+    - cron: "30 22 * * *"
   pull_request:
     types: [closed]
     branches:
