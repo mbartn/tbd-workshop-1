@@ -166,7 +166,7 @@ ORC doesn't require a table schema because it is a self-describing file format t
 
 In file spark-job.py was error, which was to specify an incorrect path to the bucket.
 
-From "DATA_BUCKET	=	"gs://tbd-2025z-9900-data/data/shakespeare/" corrected to "gs://tbd-2025z-342188-data/data/shakespeare/".
+From "DATA_BUCKET	=	"gs://tbd-2025z-9900-data/data/shakespeare/" corrected to "DATA_BUCKET	=	"gs://tbd-2025z-342188-data/data/shakespeare/".
 When running a Spark task on a Dataproc cluster, an error occurred indicating that the file was inaccessible. The error was detected based on logs in the Google Cloud console.	
 
 After launching the task in Dataproc, logs appeared in the Google Cloud console indicating a problem with accessing the file (No such object, storage.objects.get). In Logs Explorer, it was possible to see the exact path that could not be opened. This clearly indicated that the cause was an incorrect value for the DATA_BUCKET variable.
@@ -179,7 +179,7 @@ After launching the task in Dataproc, logs appeared in the Google Cloud console 
 
 
     
-13. Triggered Terraform Destroy on Schedule or After PR Merge. Goal: make sure we never forget to clean up resources and burn money.
+12. Triggered Terraform Destroy on Schedule or After PR Merge. Goal: make sure we never forget to clean up resources and burn money.
 
 Add a new GitHub Actions workflow that:
   1. runs terraform destroy -auto-approve
@@ -196,6 +196,53 @@ Steps:
      
 ***paste workflow YAML here***
 
+name: Auto destroy
+
+on:
+  schedule:
+    - cron: "0 22 * * *"
+  pull_request:
+    types: [closed]
+    branches:
+      - master
+
+permissions:
+  contents: write
+  id-token: write
+  pull-requests: write
+  issues: write
+
+jobs:
+  destroy-release:
+    if: ${{ 
+      github.event_name == 'schedule' ||
+      (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]')) 
+      }}
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v3
+    
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.11.0
+        
+    - id: auth
+      name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        token_format: access_token
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+        
+    - name: Terraform Init
+      run: terraform init -backend-config=env/backend.tfvars
+      
+    - name: Terraform Destroy
+      run: terraform destroy -auto-approve -var-file env/project.tfvars
+      
 ***paste screenshot/log snippet confirming the auto-destroy ran***
 
 ***write one sentence why scheduling cleanup helps in this workshop***
+
+Cleaning planning helps in this workshop becausepreventing unnecessary costs and keeping the environment tidy.
