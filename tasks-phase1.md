@@ -205,7 +205,7 @@ on:
     types: [closed]
     branches:
       - master
-
+      
 permissions:
   contents: write
   id-token: write
@@ -214,32 +214,31 @@ permissions:
 
 jobs:
   destroy-release:
-    if: ${{ 
-      github.event_name == 'schedule' ||
-      (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]')) 
-      }}
+  
+    if: ${{ github.event_name == 'schedule' || (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]')) }}
     runs-on: ubuntu-latest
-
-    steps:
-    - uses: actions/checkout@v3
     
-    - uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.11.0
-        
-    - id: auth
-      name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1
-      with:
-        token_format: access_token
-        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
-        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
-        
-    - name: Terraform Init
-      run: terraform init -backend-config=env/backend.tfvars
-      
-    - name: Terraform Destroy
-      run: terraform destroy -auto-approve -var-file env/project.tfvars
+    steps:
+      - uses: actions/checkout@v3
+
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.11.0
+
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+          service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+
+      - name: Terraform Init
+        run: terraform init -backend-config=env/backend.tfvars
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve -var-file env/project.tfvars
+
       
 ***paste screenshot/log snippet confirming the auto-destroy ran***
 
