@@ -195,49 +195,12 @@ Steps:
   3. Test the trigger (schedule or cleanup-tagged PR)
      
 ***paste workflow YAML here***
-/------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------/
-name: Auto destroy
-on:
-  schedule:
-    - cron: "00 23 * * *"
-  pull_request:
-    types: [closed]
-    branches:
-      - master
-      
-permissions:
-  contents: write
-  id-token: write
-  pull-requests: write
-  issues: write
 
-jobs:
-  destroy-release:
-    if: ${{ 
-      github.event_name == 'schedule' ||
-      (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]')) 
-      }}
-    runs-on: ubuntu-latest 
-    steps:
-    - uses: actions/checkout@v3
-    - uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.11.0
-    - id: auth
-      name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1
-      with:
-        token_format: access_token
-        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
-        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
-    - name: Terraform Init
-      run: terraform init -backend-config=env/backend.tfvars
-    - name: Terraform Destroy
-      run: terraform destroy -auto-approve -var-file env/project.tfvars
-
-/--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------/
+There is a problem to paste here code, so please look to the file - https://github.com/mbartn/tbd-workshop-1/blob/master/.github/workflows/auto-destroy.yml
       
 ***paste screenshot/log snippet confirming the auto-destroy ran***
+<img width="1898" height="500" alt="image" src="https://github.com/user-attachments/assets/999e3e4f-41bf-4d98-93f3-28f0c3df1ee5" />
+
 
 ***write one sentence why scheduling cleanup helps in this workshop***
 
