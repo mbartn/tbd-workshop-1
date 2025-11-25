@@ -195,12 +195,11 @@ Steps:
   3. Test the trigger (schedule or cleanup-tagged PR)
      
 ***paste workflow YAML here***
-
+/------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------/
 name: Auto destroy
-
 on:
   schedule:
-    - cron: "0 22 * * *"
+    - cron: "00 23 * * *"
   pull_request:
     types: [closed]
     branches:
@@ -214,31 +213,29 @@ permissions:
 
 jobs:
   destroy-release:
-  
-    if: ${{ github.event_name == 'schedule' || (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]')) }}
-    runs-on: ubuntu-latest
-    
+    if: ${{ 
+      github.event_name == 'schedule' ||
+      (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]')) 
+      }}
+    runs-on: ubuntu-latest 
     steps:
-      - uses: actions/checkout@v3
+    - uses: actions/checkout@v3
+    - uses: hashicorp/setup-terraform@v2
+      with:
+        terraform_version: 1.11.0
+    - id: auth
+      name: Authenticate to Google Cloud
+      uses: google-github-actions/auth@v1
+      with:
+        token_format: access_token
+        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+    - name: Terraform Init
+      run: terraform init -backend-config=env/backend.tfvars
+    - name: Terraform Destroy
+      run: terraform destroy -auto-approve -var-file env/project.tfvars
 
-      - uses: hashicorp/setup-terraform@v2
-        with:
-          terraform_version: 1.11.0
-
-      - id: auth
-        name: Authenticate to Google Cloud
-        uses: google-github-actions/auth@v1
-        with:
-          token_format: access_token
-          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
-          service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
-
-      - name: Terraform Init
-        run: terraform init -backend-config=env/backend.tfvars
-
-      - name: Terraform Destroy
-        run: terraform destroy -auto-approve -var-file env/project.tfvars
-
+/--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------/
       
 ***paste screenshot/log snippet confirming the auto-destroy ran***
 
