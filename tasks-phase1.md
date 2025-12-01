@@ -4,7 +4,7 @@ IMPORTANT ❗ ❗ ❗ Please remember to destroy all the resources after each wo
 
 1. Authors:
 
-   ***Grupa z10***
+   ***Grupa z10*** 
 
    ***https://github.com/mbartn/tbd-workshop-1***
    
