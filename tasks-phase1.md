@@ -248,4 +248,4 @@ jobs:
 
 ***write one sentence why scheduling cleanup helps in this workshop***
 
-Cleaning planning helps in this workshop becausepreventing unnecessary costs and keeping the environment tidy.
+Scheduled cleanup helps in this workshop by preventing extra costs in case someone forgets to manually clean up the environment.
