@@ -201,7 +201,7 @@ name: Auto destroy
 
 on:
   schedule:
-    - cron: "00 23 * * *"
+    - cron: "00 20 * * *"  
   pull_request:
     types: [closed]
     branches:
@@ -217,30 +217,43 @@ jobs:
   destroy-release:
     if: ${{ 
       github.event_name == 'schedule' ||
-      (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]')) 
+      (github.event.pull_request.merged == true && contains(github.event.pull_request.title, '[CLEANUP]')) ||
+      github.event_name == 'workflow_dispatch'
       }}
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
-    
-    - uses: hashicorp/setup-terraform@v2
-      with:
-        terraform_version: 1.11.0
-        
-    - id: auth
-      name: Authenticate to Google Cloud
-      uses: google-github-actions/auth@v1
-      with:
-        token_format: access_token
-        workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
-        service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
-        
-    - name: Terraform Init
-      run: terraform init -backend-config=env/backend.tfvars
+      - uses: actions/checkout@v3
       
-    - name: Terraform Destroy
-      run: terraform destroy -auto-approve -var-file env/project.tfvars
+      - uses: hashicorp/setup-terraform@v2
+        with:
+          terraform_version: 1.11.0
+          
+      - id: auth
+        name: Authenticate to Google Cloud
+        uses: google-github-actions/auth@v1
+        with:
+          token_format: access_token
+          workload_identity_provider: ${{ secrets.GCP_WORKLOAD_IDENTITY_PROVIDER_NAME }}
+          service_account: ${{ secrets.GCP_WORKLOAD_IDENTITY_SA_EMAIL }}
+          
+      - name: Terraform Init
+        run: terraform init -backend-config=env/backend.tfvars
+
+      - name: Check if Composer environment exists
+        run: |
+          if gcloud composer environments describe demo-lab --location europe-west1; then
+            echo "Environment exists, proceeding to destroy"
+          else
+            echo "Environment does not exist, skipping destroy"
+            exit 0
+          fi
+
+      - name: Wait 5 minutes before destroy
+        run: sleep 300
+
+      - name: Terraform Destroy
+        run: terraform destroy -auto-approve -var-file env/project.tfvars
 ```
 
 ***paste screenshot/log snippet confirming the auto-destroy ran***
