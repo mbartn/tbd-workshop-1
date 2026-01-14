@@ -147,5 +147,5 @@ terraform destroy -no-color -var-file env/project.tfvars
 
 ## Outputs
 
-No outputs.
+No outputs. 
 <!-- END OF PRE-COMMIT-TERRAFORM DOCS HOOK -->
